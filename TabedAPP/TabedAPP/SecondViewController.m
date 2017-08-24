@@ -10,6 +10,7 @@
 #import "MDScratchImageView.h"
 #define YLHEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLWIDTH [UIScreen mainScreen].bounds.size.width
+#define kPercentDidShow 0.8
 
 @interface SecondViewController ()<MDScratchImageViewDelegate>
 
@@ -38,7 +39,7 @@
 - (void)setUpUI{
     CGFloat lH4NavBar = self.navigationController.navigationBar.bounds.size.height;
     UIImageView *lImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, lH4NavBar + 20, self.view.bounds.size.width, self.view.bounds.size.height - lH4NavBar - 20 - self.tabBarController.tabBar.bounds.size.height)];
-    lImgV.image = [UIImage imageNamed:@"love.jpg"];
+    lImgV.image = [UIImage imageNamed:@"upside.jpg"];
     [self.view addSubview:lImgV];
     
     MDScratchImageView *lMDImgV = [[MDScratchImageView alloc] initWithFrame:CGRectMake(0, lH4NavBar + 20, self.view.bounds.size.width, self.view.bounds.size.height - lH4NavBar - 20 - self.tabBarController.tabBar.bounds.size.height)];
@@ -69,7 +70,7 @@
 //delegate
 - (void)mdScratchImageView:(MDScratchImageView *)scratchImageView didChangeMaskingProgress:(CGFloat)maskingProgress{
     NSLog(@"%f",maskingProgress);
-    if (maskingProgress > 0.8) {
+    if (maskingProgress > kPercentDidShow) {
         self.tabBarController.selectedIndex = 2;
     }
 }
