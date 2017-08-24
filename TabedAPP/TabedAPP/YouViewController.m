@@ -35,7 +35,7 @@
     
     [self m4SetUpUI];
     [self m4AddNtfies];
-//    [self m4PlayMusic];
+    [self m4PlayMusic];
     self.gIsFirstUpsideDown = YES;
     self.gIsNeedShowILoveYou = NO;
 }
