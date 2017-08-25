@@ -20,6 +20,7 @@
 @property(nonatomic, strong) UILabel *gLbl4Tip;//是集合的话立刻懒加载
 @property(nonatomic, strong) NSTimer *gTimer;//是集合的话立刻懒加载
 @property(nonatomic, strong) UIImageView *gImgV;//是集合的话立刻懒加载
+@property(nonatomic, strong) UIView *gContentV;//是集合的话立刻懒加载
 
 @property (nonatomic, assign) BOOL gIsNeedShowILoveYou;
 
@@ -42,7 +43,7 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    [self.view bringSubviewToFront:self.gImgV];
+    [self.view bringSubviewToFront:self.gContentV];
 }
 
 - (void)m4PlayMusic{
@@ -67,13 +68,7 @@
 - (void)m4ReplayMusic:(NSNotification *)ntfy{
     NSLog(@"%@",ntfy);
     NSLog(@"%@",ntfy.userInfo[@"AVAudioSessionInterruptionTypeKey"]);
-//    if ([ntfy.userInfo[@"AVAudioSessionInterruptionTypeKey"] intValue] == 0) {
-//        if ([self.gPlayer prepareToPlay]) {//前台模式下，电话终止时，准备为真
-//            [self.gPlayer play];
-//        }else{
-/** 后台模式下，电话终止时，准备始终不成功。尝试：新增后台播放id */
-//        }
-//    }
+    
     if (self.gPlayer.isPlaying) {
         [self.gPlayer pause];
     }else{
@@ -84,7 +79,17 @@
 }
 
 - (void)m4SetUpUI{
-    [self.view addSubview:self.gImgV];
+    [self.view addSubview:self.gContentV];
+    [self.gContentV addSubview:self.gImgV];
+    
+    //文本提示
+    UILabel *lLbl = [[UILabel alloc] init];
+    [self.gContentV addSubview:lLbl];
+    
+    lLbl.text = @"她在干什么？注意你说的第一个字哦！";
+    lLbl.textAlignment = NSTextAlignmentCenter;
+    lLbl.numberOfLines = 0;
+    lLbl.frame = CGRectMake(0, 0, YLWIDTH, 88);
 }
 
 - (void)m4DeviceUpsideDown{
@@ -167,7 +172,7 @@
     if (nil == _gImgV) {
         _gImgV = [[UIImageView alloc] init];
         _gImgV.image = [UIImage imageNamed:@"milker"];
-        _gImgV.frame = CGRectMake(0, 64, YLWIDTH, YLHEIGHT - 64 - 49);
+        _gImgV.frame = CGRectMake(0, 0, YLWIDTH, YLHEIGHT - 64 - 49);
     }
     return _gImgV;
 }
@@ -190,6 +195,13 @@
         _gPlayer.numberOfLoops = -520;
     }
     return  _gPlayer;
+}
+
+- (UIView *)gContentV{
+    if (nil == _gContentV) {
+        _gContentV = [[UIView alloc] initWithFrame:CGRectMake(0, 64, YLWIDTH, YLHEIGHT - 64 - 49)];
+    }
+    return _gContentV;
 }
 
 
