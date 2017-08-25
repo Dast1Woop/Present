@@ -7,7 +7,6 @@
 //
 
 #import "YouViewController.h"
-#import "OrientationDetectTool.h"
 #import <AVFoundation/AVFoundation.h>
 #define kNtfyName4DeviceUpsideDown  @"kNtfyName4DeviceUpsideDown"
 #define YLHEIGHT [UIScreen mainScreen].bounds.size.height
@@ -47,12 +46,10 @@
 }
 
 - (void)m4PlayMusic{
-    NSString *lPath = [[NSBundle mainBundle] pathForResource:@"qingFeiDeYi.mp3" ofType:nil];
-    NSURL *lUrl = [NSURL fileURLWithPath:lPath];
-    self.gPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:lUrl error:nil];
     
-    [self.gPlayer prepareToPlay];
-    [self.gPlayer play];
+    if ([self.gPlayer prepareToPlay]) {
+        [self.gPlayer play];
+    }
 }
 
 - (void)m4AddNtfies{
@@ -60,6 +57,30 @@
                                              selector:@selector(m4DeviceUpsideDown)
                                                  name:kNtfyName4DeviceUpsideDown
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(m4ReplayMusic:)
+                                                 name:AVAudioSessionInterruptionNotification
+                                               object:[AVAudioSession sharedInstance]];
+}
+
+- (void)m4ReplayMusic:(NSNotification *)ntfy{
+    NSLog(@"%@",ntfy);
+    NSLog(@"%@",ntfy.userInfo[@"AVAudioSessionInterruptionTypeKey"]);
+//    if ([ntfy.userInfo[@"AVAudioSessionInterruptionTypeKey"] intValue] == 0) {
+//        if ([self.gPlayer prepareToPlay]) {//前台模式下，电话终止时，准备为真
+//            [self.gPlayer play];
+//        }else{
+/** 后台模式下，电话终止时，准备始终不成功。尝试：新增后台播放id */
+//        }
+//    }
+    if (self.gPlayer.isPlaying) {
+        [self.gPlayer pause];
+    }else{
+        if ([self.gPlayer prepareToPlay]) {
+            [self.gPlayer play];
+        }
+    }
 }
 
 - (void)m4SetUpUI{
@@ -103,7 +124,7 @@
 
 - (void)m4AddText2Lbl{
     if (self.gLbl4Tip.text.length > 52) {
-        self.gLbl4Tip.text = @"灰白图倒过来看有惊喜!";
+        self.gLbl4Tip.text = @"隐藏关卡：灰白图倒着看!";
         self.gIsNeedShowILoveYou = YES;
     }
     
@@ -120,12 +141,11 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    [[OrientationDetectTool sharedOrientationDetectTool] startMotionMng];
+   
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[OrientationDetectTool sharedOrientationDetectTool] stopMotionMng];
     self.title = @"?";
     self.gIsFirstUpsideDown = YES;
 }
@@ -157,6 +177,19 @@
        _gTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(m4AddText2Lbl) userInfo:nil repeats:YES];
     }
     return _gTimer;
+}
+
+- (AVAudioPlayer *)gPlayer{
+    if (nil == _gPlayer) {
+        NSString *lPath = [[NSBundle mainBundle] pathForResource:@"qingFeiDeYi.mp3" ofType:nil];
+        NSURL *lUrl = [NSURL fileURLWithPath:lPath];
+        _gPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:lUrl error:nil];
+        _gPlayer.volume = 0.52;
+        
+        //负数代表无限循环
+        _gPlayer.numberOfLoops = -520;
+    }
+    return  _gPlayer;
 }
 
 

@@ -14,6 +14,7 @@
 #import "FirstViewController.h"
 #define YLHEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLWIDTH [UIScreen mainScreen].bounds.size.width
+#import "OrientationDetectTool.h"
 NSTimeInterval const lTimeInterval = 3;
 NSTimeInterval const lTimeDelay4ShowTips = 20;
 
@@ -35,6 +36,12 @@ NSTimeInterval const lTimeDelay4ShowTips = 20;
     self.gIsFirstTap = YES;
     [self m4AddGesture];
     
+    [self m4AddNtfies];
+    
+     [[OrientationDetectTool sharedOrientationDetectTool] startMotionMng];
+}
+
+- (void)m4AddNtfies{
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(m4AppDidBecomeActive)
                                                  name:UIApplicationDidBecomeActiveNotification

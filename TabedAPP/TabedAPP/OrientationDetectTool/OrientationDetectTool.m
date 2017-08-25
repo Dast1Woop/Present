@@ -17,6 +17,7 @@
 #import "OrientationDetectTool.h"
 #import <CoreMotion/CoreMotion.h>
 #define kNtfyName4DeviceUpsideDown  @"kNtfyName4DeviceUpsideDown"
+#define kNtfy4DevicePortrait @"kNtfy4DevicePortrait"
 
 /** 是否是第一次播报颠倒的信息.声明为全局变量,
  才能保证只有第一次是被初始化为yes.
@@ -109,6 +110,10 @@ HMSingleton_m(OrientationDetectTool);
       self.xisPortraitUpsideDown = NO;
       self.xisLandScape = NO;
       gIsFirstSpeek = YES;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNtfy4DevicePortrait
+                                                            object:nil
+                                                          userInfo:nil];
 
       /** 震动并语音提醒 */
 //      AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);

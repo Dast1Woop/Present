@@ -11,9 +11,13 @@
 #define YLHEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLWIDTH [UIScreen mainScreen].bounds.size.width
 #define kPercentDidShow 0.8
+#define kNtfyName4DeviceUpsideDown  @"kNtfyName4DeviceUpsideDown"
+#define kNtfy4DevicePortrait @"kNtfy4DevicePortrait"
 
 @interface SecondViewController ()<MDScratchImageViewDelegate>
-
+@property(nonatomic, strong) UIImageView *gImgV;//是集合的话立刻懒加载
+@property(nonatomic, strong) NSTimer *gTimer;//是集合的话立刻懒加载
+@property (nonatomic, assign) int gSecond;
 @end
 
 @implementation SecondViewController
@@ -22,6 +26,46 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor yellowColor];
     self.title = @"√e";
+    
+    [self m4AddNtfies];
+    self.gSecond = 0;
+}
+
+- (void)m4AddNtfies{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(m4DeviceUpsideDown2SecVC)
+                                                 name:kNtfyName4DeviceUpsideDown
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(m4DevicePortrait2SecVC)
+                                                 name:kNtfy4DevicePortrait
+                                               object:nil];
+}
+
+/** 倒立时显示标注图，竖屏时换回来 */
+- (void)m4DeviceUpsideDown2SecVC{
+    if (self.gSecond == 0) {
+        [[NSRunLoop currentRunLoop] addTimer:self.gTimer forMode:NSRunLoopCommonModes];
+    }
+    
+    //5s后再改变图片
+    if (self.gSecond >= 5) {
+        self.gImgV.image = [UIImage imageNamed:@"upsideWithMark"];
+        
+        [self.gTimer invalidate];
+        self.gTimer = nil;
+    }
+    
+}
+
+- (void)m4Timer{
+    self.gSecond += 1;
+}
+
+- (void)m4DevicePortrait2SecVC{
+    self.gSecond = 0;
+    self.gImgV.image = [UIImage imageNamed:@"upside"];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -38,9 +82,7 @@
 
 - (void)setUpUI{
     CGFloat lH4NavBar = self.navigationController.navigationBar.bounds.size.height;
-    UIImageView *lImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, lH4NavBar + 20, self.view.bounds.size.width, self.view.bounds.size.height - lH4NavBar - 20 - self.tabBarController.tabBar.bounds.size.height)];
-    lImgV.image = [UIImage imageNamed:@"upside.jpg"];
-    [self.view addSubview:lImgV];
+    [self.view addSubview:self.gImgV];
     
     MDScratchImageView *lMDImgV = [[MDScratchImageView alloc] initWithFrame:CGRectMake(0, lH4NavBar + 20, self.view.bounds.size.width, self.view.bounds.size.height - lH4NavBar - 20 - self.tabBarController.tabBar.bounds.size.height)];
     [lMDImgV setImage:[UIImage imageNamed:@"cover.jpg"] radius:20];
@@ -73,6 +115,27 @@
     if (maskingProgress > kPercentDidShow) {
         self.tabBarController.selectedIndex = 2;
     }
+}
+
+#pragma mark -  getter & setter
+- (UIImageView *)gImgV{
+    if (nil == _gImgV) {
+        CGFloat lH4NavBar = self.navigationController.navigationBar.bounds.size.height;
+        _gImgV = [[UIImageView alloc] initWithFrame:CGRectMake(0, lH4NavBar + 20, self.view.bounds.size.width, self.view.bounds.size.height - lH4NavBar - 20 - self.tabBarController.tabBar.bounds.size.height)];
+        _gImgV.image = [UIImage imageNamed:@"upside"];
+    }
+    return _gImgV;
+}
+
+- (NSTimer *)gTimer{
+    if (nil == _gTimer) {
+        _gTimer = [NSTimer scheduledTimerWithTimeInterval:1
+                                                   target:self
+                                                 selector:@selector(m4Timer)
+                                                 userInfo:nil
+                                                  repeats:YES];
+    }
+    return _gTimer;
 }
 
 
