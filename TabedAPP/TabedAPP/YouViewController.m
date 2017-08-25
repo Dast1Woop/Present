@@ -9,10 +9,13 @@
 #import "YouViewController.h"
 #import <AVFoundation/AVFoundation.h>
 #define kNtfyName4DeviceUpsideDown  @"kNtfyName4DeviceUpsideDown"
+#define kNtfy4DevicePortrait @"kNtfy4DevicePortrait"
 #define YLHEIGHT [UIScreen mainScreen].bounds.size.height
 #define YLWIDTH [UIScreen mainScreen].bounds.size.width
 
 #define OFFSET -80
+#define kTime4RefreshTips 1
+
 @interface YouViewController ()
 @property (nonatomic, assign) BOOL gIsFirstUpsideDown;
 
@@ -20,7 +23,9 @@
 @property(nonatomic, strong) UILabel *gLbl4Tip;//是集合的话立刻懒加载
 @property(nonatomic, strong) NSTimer *gTimer;//是集合的话立刻懒加载
 @property(nonatomic, strong) UIImageView *gImgV;//是集合的话立刻懒加载
-@property(nonatomic, strong) UIView *gContentV;//是集合的话立刻懒加载
+@property(nonatomic, strong) UIView *gContentV4Protrait;//是集合的话立刻懒加载
+@property(nonatomic, strong) UIView *gContentV4UpsideDown;//是集合的话立刻懒加载
+@property(nonatomic, strong) UIWebView *gWebV;//是集合的话立刻懒加载
 
 @property (nonatomic, assign) BOOL gIsNeedShowILoveYou;
 
@@ -43,7 +48,7 @@
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    [self.view bringSubviewToFront:self.gContentV];
+    [self.view bringSubviewToFront:self.gContentV4Protrait];
 }
 
 - (void)m4PlayMusic{
@@ -57,6 +62,11 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(m4DeviceUpsideDown)
                                                  name:kNtfyName4DeviceUpsideDown
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(m4DevicePortrait2SecVC)
+                                                 name:kNtfy4DevicePortrait
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -79,12 +89,12 @@
 }
 
 - (void)m4SetUpUI{
-    [self.view addSubview:self.gContentV];
-    [self.gContentV addSubview:self.gImgV];
+    [self.view addSubview:self.gContentV4Protrait];
+    [self.gContentV4Protrait addSubview:self.gImgV];
     
     //文本提示
     UILabel *lLbl = [[UILabel alloc] init];
-    [self.gContentV addSubview:lLbl];
+    [self.gContentV4Protrait addSubview:lLbl];
     
     lLbl.text = @"她在干什么？注意你说的第一个字哦！";
     lLbl.textAlignment = NSTextAlignmentCenter;
@@ -94,6 +104,7 @@
 
 - (void)m4DeviceUpsideDown{
     if (NO == self.gIsFirstUpsideDown) {
+        [self.view bringSubviewToFront:self.gContentV4UpsideDown];
         return;
     }
     self.gIsFirstUpsideDown = NO;
@@ -101,17 +112,15 @@
     self.title = @"980";
     
     //界面变为播放gif图
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"128e980" ofType:@"gif"];
-    NSData *gifData = [NSData dataWithContentsOfFile:path];
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, OFFSET, YLWIDTH, YLHEIGHT - OFFSET)];
-    webView.scalesPageToFit = YES;
-    [webView loadData:gifData MIMEType:@"image/gif" textEncodingName:@"utf-8" baseURL:[NSURL URLWithString:@"https://www.baidu.com"]];
-    webView.backgroundColor = [UIColor whiteColor];
-    webView.opaque = NO;
-    [self.view addSubview:webView];
+    [self.view addSubview:self.gContentV4UpsideDown];
+    [self.gContentV4UpsideDown addSubview:self.gWebV];
     
     //添加下拉提示：“你看不到我”
-    [self.view addSubview:self.gLbl4Tip ];
+    [self.gContentV4UpsideDown addSubview:self.gLbl4Tip ];
+    
+    //lbl旋转360
+    self.gLbl4Tip.transform = CGAffineTransformMakeRotation(M_PI);
+    
     
     #warning:高度设置时，因括号位置不对，即YLHEIGHT*(1 - 0.45 - 64 - 49）,打印出来为-75004.150000，控件高度为负数，居然导致程序内存暴增被杀死。
     NSLog(@"ha = %f",(1 - 0.45) - 64 - 49);
@@ -120,6 +129,10 @@
     
     //随时间增加文字
     [[NSRunLoop currentRunLoop] addTimer:self.gTimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)m4DevicePortrait2SecVC{
+    [self.view bringSubviewToFront:self.gContentV4Protrait];
 }
 
 - (void)dealloc{
@@ -134,7 +147,7 @@
     }
     
     if (self.gIsNeedShowILoveYou == YES) {
-        if ([self.gLbl4Tip.text containsString:@"惊喜!Tips"]) {
+        if ([self.gLbl4Tip.text containsString:@"倒着看!Tips"]) {
                 self.gLbl4Tip.text = @"Tips:上拉，下拉！❤️";
         }
         self.gLbl4Tip.text = [NSString stringWithFormat:@"%@%@",self.gLbl4Tip.text,@"Tips:上拉，下拉！❤️"];
@@ -179,7 +192,11 @@
 
 - (NSTimer *)gTimer{
     if (nil == _gTimer) {
-       _gTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(m4AddText2Lbl) userInfo:nil repeats:YES];
+       _gTimer = [NSTimer scheduledTimerWithTimeInterval:kTime4RefreshTips
+                                                  target:self
+                                                selector:@selector(m4AddText2Lbl)
+                                                userInfo:nil
+                                                 repeats:YES];
     }
     return _gTimer;
 }
@@ -197,12 +214,33 @@
     return  _gPlayer;
 }
 
-- (UIView *)gContentV{
-    if (nil == _gContentV) {
-        _gContentV = [[UIView alloc] initWithFrame:CGRectMake(0, 64, YLWIDTH, YLHEIGHT - 64 - 49)];
+- (UIView *)gContentV4Protrait{
+    if (nil == _gContentV4Protrait) {
+        _gContentV4Protrait = [[UIView alloc] initWithFrame:CGRectMake(0, 64, YLWIDTH, YLHEIGHT - 64 - 49)];
     }
-    return _gContentV;
+    return _gContentV4Protrait;
 }
 
+- (UIWebView *)gWebV{
+    if (nil == _gWebV) {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"128e980" ofType:@"gif"];
+        NSData *gifData = [NSData dataWithContentsOfFile:path];
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, OFFSET, YLWIDTH, YLHEIGHT - OFFSET)];
+        webView.scalesPageToFit = YES;
+        [webView loadData:gifData MIMEType:@"image/gif" textEncodingName:@"utf-8" baseURL:[NSURL URLWithString:@"https://www.baidu.com"]];
+        webView.backgroundColor = [UIColor whiteColor];
+        webView.opaque = NO;
+        
+        _gWebV = webView;
+    }
+    return _gWebV;
+}
+
+- (UIView *)gContentV4UpsideDown{
+    if (nil == _gContentV4UpsideDown) {
+        _gContentV4UpsideDown = [[UIView alloc] initWithFrame:CGRectMake(0, 0, YLWIDTH, YLHEIGHT)];
+    }
+    return _gContentV4UpsideDown;
+}
 
 @end

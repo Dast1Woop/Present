@@ -24,7 +24,7 @@
     NSError *error = nil;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:&error];
     
-    
+    [NSThread sleepForTimeInterval:2];
     
     return YES;
 }

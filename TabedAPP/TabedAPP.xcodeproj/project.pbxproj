@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		230D67841F50219A002AFD18 /* qidong.png in Resources */ = {isa = PBXBuildFile; fileRef = 230D67831F50219A002AFD18 /* qidong.png */; };
-		230D678E1F5024C2002AFD18 /* qixi.png in Resources */ = {isa = PBXBuildFile; fileRef = 230D678D1F5024C2002AFD18 /* qixi.png */; };
 		23D8DF2C1F46B69C009AA7F0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D8DF2B1F46B69C009AA7F0 /* main.m */; };
 		23D8DF2F1F46B69C009AA7F0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D8DF2E1F46B69C009AA7F0 /* AppDelegate.m */; };
 		23D8DF321F46B69C009AA7F0 /* FirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23D8DF311F46B69C009AA7F0 /* FirstViewController.m */; };
@@ -25,6 +24,7 @@
 		23D8DF711F46E937009AA7F0 /* 128e980.gif in Resources */ = {isa = PBXBuildFile; fileRef = 23D8DF701F46E937009AA7F0 /* 128e980.gif */; };
 		23F0CB391F4EE5700054F4BA /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23F0CB381F4EE5700054F4BA /* AVFoundation.framework */; };
 		23F0CB3B1F4EE66D0054F4BA /* qingFeiDeYi.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 23F0CB3A1F4EE66D0054F4BA /* qingFeiDeYi.mp3 */; };
+		23F3044E1F5025B700E0C766 /* qidong1.png in Resources */ = {isa = PBXBuildFile; fileRef = 23F3044D1F5025B700E0C766 /* qidong1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +46,6 @@
 
 /* Begin PBXFileReference section */
 		230D67831F50219A002AFD18 /* qidong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qidong.png; sourceTree = "<group>"; };
-		230D678D1F5024C2002AFD18 /* qixi.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qixi.png; sourceTree = "<group>"; };
 		23D8DF271F46B69B009AA7F0 /* TabedAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TabedAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D8DF2B1F46B69C009AA7F0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		23D8DF2D1F46B69C009AA7F0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -77,6 +76,7 @@
 		23D8DF701F46E937009AA7F0 /* 128e980.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 128e980.gif; sourceTree = "<group>"; };
 		23F0CB381F4EE5700054F4BA /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		23F0CB3A1F4EE66D0054F4BA /* qingFeiDeYi.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = qingFeiDeYi.mp3; sourceTree = "<group>"; };
+		23F3044D1F5025B700E0C766 /* qidong1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = qidong1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +142,7 @@
 				23D8DF361F46B69C009AA7F0 /* Main.storyboard */,
 				23D8DF391F46B69D009AA7F0 /* Assets.xcassets */,
 				23D8DF3B1F46B69D009AA7F0 /* LaunchScreen.storyboard */,
-				230D678D1F5024C2002AFD18 /* qixi.png */,
+				23F3044D1F5025B700E0C766 /* qidong1.png */,
 				230D67831F50219A002AFD18 /* qidong.png */,
 				23D8DF3E1F46B69D009AA7F0 /* Info.plist */,
 				23F0CB3A1F4EE66D0054F4BA /* qingFeiDeYi.mp3 */,
@@ -322,7 +322,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D8DF711F46E937009AA7F0 /* 128e980.gif in Resources */,
-				230D678E1F5024C2002AFD18 /* qixi.png in Resources */,
+				23F3044E1F5025B700E0C766 /* qidong1.png in Resources */,
 				23D8DF3D1F46B69D009AA7F0 /* LaunchScreen.storyboard in Resources */,
 				23F0CB3B1F4EE66D0054F4BA /* qingFeiDeYi.mp3 in Resources */,
 				23D8DF3A1F46B69D009AA7F0 /* Assets.xcassets in Resources */,
